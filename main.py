@@ -4,6 +4,7 @@ from urllib.error import URLError
 from bs4 import BeautifulSoup
 import requests
 import json
+import re
 
 
 def main():
@@ -30,14 +31,21 @@ def read_gov_site():
 
 def read_uni_site():
     # Have to find subpage with majors
-    link = "http://www.uw.edu.pl"
+    link = "https://www.uj.edu.pl/"
     html = urlopen(link)
     bs = BeautifulSoup(html.read(), "html.parser")
     subpages = bs.find_all("a")
     links = list()
     for subpage in subpages:
         links.append(subpage.get("href"))
-    print(links)
+    for link in links:
+        match_obj = None
+        try:
+            match_obj = re.search("studia", link)
+        except:
+            pass
+        if match_obj is not None:
+            print(link)
 
 
 if __name__ == "__main__":
