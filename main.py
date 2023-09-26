@@ -8,7 +8,7 @@ import re
 
 
 def main():
-    read_uni_site()
+    read_courses(1)
 
 
 def read_gov_api():
@@ -31,21 +31,33 @@ def read_gov_site():
 
 def read_uni_site():
     # Have to find subpage with majors
-    link = "https://www.uj.edu.pl/"
+    # link = "https://www.uj.edu.pl/"
+    link = "https://studia.uj.edu.pl"
     html = urlopen(link)
     bs = BeautifulSoup(html.read(), "html.parser")
     subpages = bs.find_all("a")
+
     links = list()
     for subpage in subpages:
         links.append(subpage.get("href"))
+
+    regex = "studia|kierunki|oferta|syllabus"
     for link in links:
         match_obj = None
         try:
-            match_obj = re.search("studia", link)
+            match_obj = re.search(regex, link)
         except:
             pass
         if match_obj is not None:
             print(link)
+
+
+def read_courses(uni):
+    response_API = requests.get(
+        "https://radon.nauka.gov.pl/opendata/polon/courses").json()
+    results = response_API["results"]
+    for result in results:
+        print(result["courseName"])
 
 
 if __name__ == "__main__":
