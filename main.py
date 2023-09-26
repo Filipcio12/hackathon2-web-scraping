@@ -7,7 +7,7 @@ import json
 
 
 def main():
-    read_gov_site()
+    read_uni_site()
 
 
 def read_gov_api():
@@ -25,6 +25,18 @@ def read_gov_site():
     links = list()
     for uni in unis:
         links.append(uni.get("href"))
+    print(links)
+
+
+def read_uni_site():
+    # Have to find subpage with majors
+    link = "http://www.uw.edu.pl"
+    html = urlopen(link)
+    bs = BeautifulSoup(html.read(), "html.parser")
+    subpages = bs.find_all("a")
+    links = list()
+    for subpage in subpages:
+        links.append(subpage.get("href"))
     print(links)
 
 
